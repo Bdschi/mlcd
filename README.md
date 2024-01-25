@@ -1,4 +1,4 @@
-# mlcd
+# Create a Client Dictionary using Machine Learning
 Machine Learning Algorithm to create Client Dictionary 
 
 ## Support Vector Machines and Categorical Values
