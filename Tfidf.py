@@ -46,14 +46,11 @@ with open("articletexts.txt", "r") as f:
     print(vectorizer.best_estimator_.steps)
  
     # Transform the test articletexts using the same vectorizer
-    test_vectors = vectorizer.transform(test_articletexts)
-
-    # Create a MultinomialNB classifier to predict the categories
-    classifier = MultinomialNB()
-    # Fit the classifier on the training vectors and categories
-    classifier.fit(train_vectors, train_categories)
+    # AttributeError: This 'Pipeline' has no attribute 'transform'
+    # test_vectors = vectorizer.transform(test_articletexts)
+  
     # Predict the categories for the test vectors
-    test_predictions = classifier.predict(test_vectors)
+    test_predictions = vectorizer.predict(test_articletexts)
 
     # Print the accuracy score of the classifier
     print("Accuracy:", accuracy_score(test_categories, test_predictions))
