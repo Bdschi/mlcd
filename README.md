@@ -4,37 +4,29 @@ Machine Learning Algorithm to create Client Dictionary
 ## Client Dictionaries with Support Vector Machines
 I can try to write a python program for you. Here is one possible solution:
 
-### Import the necessary modules
 ```python
+# Import the necessary modules
 from sklearn import svm
 from sklearn.impute import KNNImputer
 import numpy as np
-```
 
-### Define the data with missing values
-```python
+# Define the data with missing values
 X = np.array([[1, 2, np.nan],
 [3, 4, 5],
 [np.nan, 6, 7],
 [8, 9, 10]])
 y = np.array([0, 1, 1, 0])
-```
 
-### Use the KNNImputer to impute the missing values
-```python
+# Use the KNNImputer to impute the missing values
 imputer = KNNImputer(n_neighbors=2)
 X_imputed = imputer.fit_transform(X)
-```
 
-### Use the SVC with the RBF kernel to fit and predict the data
-```python
+# Use the SVC with the RBF kernel to fit and predict the data
 svc = svm.SVC(kernel='rbf')
 svc.fit(X_imputed, y)
 y_pred = svc.predict(X_imputed)
-```
 
-### Print the predictions
-```python
+# Print the predictions
 print(y_pred)
 ```
 
