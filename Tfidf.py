@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
+import mlcdconfig
 # from sklearn.model_selection import train_test_split
 
 # Open the file and read the lines
@@ -20,11 +21,11 @@ with open("articletexts.txt", "r") as f:
         categories.append(category.strip())
 
     # Split the data into training and test sets
-    train_articletexts = articletexts[:80]
-    train_categories = categories[:80]
-    test_articletexts = articletexts[80:]
-    test_categories = categories[80:]
-    stop_words=['in', 'of', 'at', 'a', 'the', 'and', 'is', 'to']
+    train_articletexts = articletexts[:mlcdconfig.rows1]
+    train_categories = categories[:mlcdconfig.rows1]
+    test_articletexts = articletexts[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]
+    test_categories = categories[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]
+    stop_words=['in', 'und']
 
     # Create a TfidfVectorizer to transform the text into vectors
     # As the default only delivers an accuracy of 50%, we need to optimize parameters for the vectorizer
