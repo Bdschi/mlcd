@@ -2,6 +2,10 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.multiclass import OneVsRestClassifier
+# from sklearn.model_selection import train_test_split
 
 # Open the file and read the lines
 with open("articletexts.txt", "r") as f:
@@ -20,16 +24,27 @@ with open("articletexts.txt", "r") as f:
     train_categories = categories[:80]
     test_articletexts = articletexts[80:]
     test_categories = categories[80:]
+    stop_words=['in', 'of', 'at', 'a', 'the', 'and', 'is', 'to']
 
     # Create a TfidfVectorizer to transform the text into vectors
-    # As the default only delivers an accuracy of 50%, we need to parameters to the vectorizer
-    # min_df: minimum number of documents a word must be present in to be kept
-    # max_df: maximum number of documents a word can be present in to be kept
-    # stop_words: remove the most common words in the English language
-    # We set min_df to 1 and max_df to 50
-    vectorizer = TfidfVectorizer(min_df=1, max_df=50, stop_words="english")
-    # Fit the vectorizer on the training articletexts and transform them
-    train_vectors = vectorizer.fit_transform(train_articletexts)
+    # As the default only delivers an accuracy of 50%, we need to optimize parameters for the vectorizer
+    pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(stop_words=stop_words)),
+        ('clf', OneVsRestClassifier(MultinomialNB(
+            fit_prior=True, class_prior=None))),
+    ])
+    parameters = {
+        'tfidf__max_df': (0.25, 0.5, 0.75),
+        'tfidf__ngram_range': [(1, 1), (1, 2), (1, 3)],
+        'clf__estimator__alpha': (1e-2, 1e-3)
+    }
+
+    vectorizer = GridSearchCV(pipeline, parameters, cv=2, n_jobs=2, verbose=3)
+    vectorizer.fit(train_articletexts, train_categories)
+
+    print("Best parameters set:")
+    print(vectorizer.best_estimator_.steps)
+ 
     # Transform the test articletexts using the same vectorizer
     test_vectors = vectorizer.transform(test_articletexts)
 
