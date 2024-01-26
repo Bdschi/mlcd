@@ -47,3 +47,17 @@ The input for support vector machines (SVMs) should be numeric values, as SVMs a
 However, categorical values can be converted to numeric values using various encoding techniques, such as one-hot encoding, ordinal encoding, or hashing encoding [Is it ok to mix categorical and-continuous data for support vector machines?](https://stats.stackexchange.com/questions/50474/is-it-ok-to-mix-categorical-and-continuous-data-for-svm-support-vector-machines), [Support vector machine algorithm](https://www.geeksforgeeks.org/support-vector-machine-algorithm/).
 These techniques can transform the categorical values into binary or integer values that can be used by SVMs.
 However, some encoding techniques may introduce sparsity, dimensionality, or collinearity issues, which may affect the performance of SVMs. Therefore, it is important to choose the appropriate encoding technique for the data and the problem [How to deal with an svm with categorical attributes?](https://stats.stackexchange.com/questions/52915/how-to-deal-with-an-svm-with-categorical-attributes).
+
+## Text Embedding
+
+Yes, you can do text embedding with sklearn in python. Text embedding is a process of transforming text into numerical vectors that can be used by machine learning algorithms. Sklearn provides various tools and methods to perform text embedding, such as:
+
+* CountVectorizer and TfidfVectorizer, which can convert text into sparse matrices of word counts or term frequencies-inverse document frequencies (tf-idf) respectively https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html.
+
+*  HashingVectorizer, which can convert text into sparse matrices of hashed word counts, without requiring any vocabulary or dictionary https://scikit-learn.org/stable/auto_examples/text/plot_document_clustering.html.
+
+*  FeatureHasher, which can convert text into sparse matrices of hashed features, such as n-grams or word shapes https://stackoverflow.com/questions/55198750/using-pretrained-glove-word-embedding-with-scikit-learn.
+
+*  TruncatedSVD, which can reduce the dimensionality of text matrices using latent semantic analysis (LSA) or singular value decomposition (SVD) https://medium.com/@pankaj_pandey/creating-and-searching-text-embeddings-using-openai-embeddings-in-python-a-step-by-step-guide-e374ebad07bc.
+
+You can learn more about how to use sklearn for text embedding from [Scikit-Learn](https://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html), [Stack Overflow](https://stackoverflow.com/questions/55198750/using-pretrained-glove-word-embedding-with-scikit-learn), or [Medium](https://medium.com/@pankaj_pandey/creating-and-searching-text-embeddings-using-openai-embeddings-in-python-a-step-by-step-guide-e374ebad07bc). I hope this helps. 
