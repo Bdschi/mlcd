@@ -55,3 +55,7 @@ with open("articletexts.txt", "r") as f:
 
     # Print the accuracy score of the classifier
     print("Accuracy:", accuracy_score(test_categories, test_predictions))
+
+    for i in range(0,mlcdconfig.rows2):
+        if test_categories[i] != test_predictions[i]:
+            print(test_articletexts[i] +"|"+ test_categories[i] +"|"+ test_predictions[i])
