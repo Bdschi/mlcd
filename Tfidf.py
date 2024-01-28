@@ -35,9 +35,9 @@ with open("articletexts.txt", "r") as f:
             fit_prior=True, class_prior=None))),
     ])
     parameters = {
-        'tfidf__max_df': (0.25, 0.5, 0.75),
-        'tfidf__ngram_range': [(1, 1), (1, 2), (1, 3)],
-        'clf__estimator__alpha': (1e-2, 1e-3)
+        'tfidf__max_df': (0.2, 0.25, 0.5, 0.75),
+        'tfidf__ngram_range': [(1,1), (1,2), (1,3), (1,4)],
+        'clf__estimator__alpha': (2e-2, 1e-2, 1e-3)
     }
 
     vectorizer = GridSearchCV(pipeline, parameters, cv=2, n_jobs=2, verbose=3)
