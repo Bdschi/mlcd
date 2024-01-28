@@ -1,10 +1,9 @@
 # Import the necessary modules
 from sklearn.feature_extraction.text import HashingVectorizer
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from sklearn.multiclass import OneVsRestClassifier
+from sklearn.linear_model import LogisticRegression
 import mlcdconfig
 # from sklearn.model_selection import train_test_split
 
@@ -30,12 +29,13 @@ with open("articletexts.txt", "r") as f:
     # Create a HashingVectorizer to transform the text into vectors
     pipeline = Pipeline([
         ('hashvec', HashingVectorizer(stop_words=stop_words)),
-        ('clf', OneVsRestClassifier(MultinomialNB(
-            fit_prior=True, class_prior=None))),
+        ('logreg', LogisticRegression(max_iter=1000))
     ])
     parameters = {
-        'hashvec__ngram_range': [(1, 1), (1, 2), (1, 3)],
-        'clf__estimator__alpha': (1e-2, 1e-3)
+        'hashvec__n_features': [2**9, 2**10],
+        'logreg__C': [0.1, 1, 10, 100],
+        'logreg__penalty': [None, "l2"],
+        'logreg__solver': ["lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"]
     }
 
     vectorizer = GridSearchCV(pipeline, parameters, cv=2, n_jobs=2, verbose=3)
