@@ -1,5 +1,5 @@
 # Import the necessary modules
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
@@ -30,14 +30,14 @@ with open("articletexts.txt", "r") as f:
     # Create a TfidfVectorizer to transform the text into vectors
     # As the default only delivers an accuracy of 50%, we need to optimize parameters for the vectorizer
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(stop_words=stop_words)),
+        ('cntvec', CountVectorizer(stop_words=stop_words)),
         ('clf', OneVsRestClassifier(MultinomialNB(
             fit_prior=True, class_prior=None))),
     ])
     parameters = {
-        'tfidf__max_df': (0.2, 0.25, 0.5, 0.75),
-        'tfidf__ngram_range': [(1,1), (1,2), (1,3), (1,4)],
-        'clf__estimator__alpha': (2e-2, 1e-2, 1e-3)
+        'cntvec__max_df': (0.25, 0.5, 0.75),
+        'cntvec__ngram_range': [(1, 1), (1, 2), (1, 3)],
+        'clf__estimator__alpha': (1e-2, 1e-3)
     }
 
     vectorizer = GridSearchCV(pipeline, parameters, cv=2, n_jobs=2, verbose=3)
@@ -55,7 +55,3 @@ with open("articletexts.txt", "r") as f:
 
     # Print the accuracy score of the classifier
     print("Accuracy:", accuracy_score(test_categories, test_predictions))
-
-    for i in range(0,mlcdconfig.rows2):
-        if test_categories[i] != test_predictions[i]:
-            print(test_articletexts[i] +"|"+ test_categories[i] +"|"+ test_predictions[i])
