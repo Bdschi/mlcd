@@ -32,10 +32,10 @@ with open("articletexts.txt", "r") as f:
         ('logreg', LogisticRegression(max_iter=1000))
     ])
     parameters = {
-        'hashvec__n_features': [2**9, 2**10],
-        'logreg__C': [0.1, 1, 10, 100],
-        'logreg__penalty': [None, "l2"],
-        'logreg__solver': ["lbfgs", "liblinear", "newton-cg", "newton-cholesky", "sag", "saga"]
+        'hashvec__n_features': [2**14, 2**15, 2**16, 2**17],
+        'logreg__C': [5],
+        'logreg__penalty': ["l2"],
+        'logreg__solver': ["saga"]
     }
 
     vectorizer = GridSearchCV(pipeline, parameters, cv=2, n_jobs=2, verbose=3)
