@@ -6,7 +6,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
 import mlcdconfig
-# from sklearn.model_selection import train_test_split
 
 # Open the file and read the lines
 with open("articletexts.txt", "r") as f:
@@ -34,9 +33,11 @@ with open("articletexts.txt", "r") as f:
         ('clf', OneVsRestClassifier(MultinomialNB(
             fit_prior=True, class_prior=None))),
     ])
+
     parameters = {
         'tfidf__max_df': (0.2, 0.25, 0.5, 0.75),
         'tfidf__ngram_range': [(1,1), (1,2), (1,3), (1,4)],
+        'tfidf__use_idf': (True, False),
         'clf__estimator__alpha': (2e-2, 1e-2, 1e-3)
     }
 
@@ -56,6 +57,8 @@ with open("articletexts.txt", "r") as f:
     # Print the accuracy score of the classifier
     print("Accuracy:", accuracy_score(test_categories, test_predictions))
 
+    # for each of the wrong predictions print the articletext, the correct category and the predicted category
     for i in range(0,mlcdconfig.rows2):
         if test_categories[i] != test_predictions[i]:
-            print(test_articletexts[i] +"|"+ test_categories[i] +"|"+ test_predictions[i])
+            print(test_articletexts[i] +"|"+ test_categories[i] +"|"+ test_predictions[i]+"|"+str(vectorizer.predict_proba([test_articletexts[i]]).max()))
+            # print also the probability of the predicted category
