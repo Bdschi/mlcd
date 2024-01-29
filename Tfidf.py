@@ -6,18 +6,31 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
 import mlcdconfig
+import csv
 
-# Open the file and read the lines
-with open("articletexts.txt", "r") as f:
-    lines = f.readlines()
+level=1
+articletexts = []
+categories = []
 
-    # Split the lines into articletexts and categories
-    articletexts = []
-    categories = []
+file="/mnt/c/Users/bdschi/Downloads/artikelstruktur_(Artikeltext)_558552.csv"
+with open(file, "r") as csvfile:
+    lines = csv.reader(csvfile, delimiter=';', quotechar='"')
     for line in lines:
-        sentence, category = line.split("\t")
-        articletexts.append(sentence)
-        categories.append(category.strip())
+        text = line[0]
+        if text[0] == '"':
+            text=text[1:]
+        if text[-1] == '"':
+            text=text[:-1]
+        atexts=text.split("\\")
+        if len(atexts) < 6: 
+            continue
+        if atexts[level][0] == " ":
+            atexts[level]=atexts[level][1:]
+        if atexts[5][0] == " ": 
+            atexts[5]=atexts[5][1:]
+        #print("articletext=\"%s\" category=\"%s\"" % (atexts[5], atexts[level]))
+        articletexts.append(atexts[5])
+        categories.append(atexts[level])
 
     # Split the data into training and test sets
     train_articletexts = articletexts[:mlcdconfig.rows1]
