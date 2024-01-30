@@ -7,8 +7,9 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
 import mlcdconfig
 import csv
+import random
 
-level=1
+level=4
 articletexts = []
 categories = []
 
@@ -32,11 +33,16 @@ with open(file, "r") as csvfile:
         articletexts.append(atexts[5])
         categories.append(atexts[level])
 
+    randomindices=[i for i in range(0, len(articletexts))]
+
     # Split the data into training and test sets
-    train_articletexts = articletexts[:mlcdconfig.rows1]
-    train_categories = categories[:mlcdconfig.rows1]
-    test_articletexts = articletexts[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]
-    test_categories = categories[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]
+    # TypeError: list indices must be integers or slices, not list
+    # create a list of all articletexts with indices in randomindices[:mlcdconfig.rows1]
+    train_articletexts = [articletexts[i] for i in randomindices[:mlcdconfig.rows1]]
+    train_categories = [categories[i] for i in randomindices[:mlcdconfig.rows1]]
+    test_articletexts = [articletexts[i] for i in randomindices[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]]
+    test_categories = [categories[i] for i in randomindices[mlcdconfig.rows1:mlcdconfig.rows1+mlcdconfig.rows2]]
+
     stop_words=['in', 'und']
 
     # Create a TfidfVectorizer to transform the text into vectors
