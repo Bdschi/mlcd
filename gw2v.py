@@ -24,7 +24,7 @@ for text in tokenized_texts:
 
 # Categorize using K-Means clustering
 num_clusters = 3  # Adjust based on your expected number of categories
-kmeans = KMeans(n_clusters=num_clusters)
+kmeans = KMeans(n_clusters=num_clusters, n_init='auto', max_iter=100, random_state=42)
 kmeans.fit(doc_vectors)
 
 # Get predicted categories
