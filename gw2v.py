@@ -19,7 +19,7 @@ model = Word2Vec(tokenized_texts, min_count=1)
 # Create document vectors by averaging word vectors
 doc_vectors = []
 for text in tokenized_texts:
-    doc_vector = sum(model[word] for word in text) / len(text)
+    doc_vector = sum(model.wv[word] for word in text) / len(text)
     doc_vectors.append(doc_vector)
 
 # Categorize using K-Means clustering
