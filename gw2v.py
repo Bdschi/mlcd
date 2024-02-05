@@ -14,6 +14,27 @@ def clean_punc(sentence):
   cleaned=re.sub(r'[?|!|\'|"|#]',r'',sentence)
   cleaned=re.sub(r'[.|,)|(|\|/]',r' ',cleaned)
   return cleaned
+def vectors_from_text(model, texts):
+  doc_vectors=[]
+  for text in texts:
+     vector=[None]*model.vector_size
+     for word in clean_punc(text).split():
+         for i in range(0, model.vector_size):
+            if vector[i] is None or vector[i] > model.wv[word][i]:
+                vector[i] = model.wv[word][i]
+     doc_vectors.append(vector)  
+  return doc_vectors
+
+def vectors_from_text_max(model, texts):
+  doc_vectors=[]
+  for text in texts:
+     vector=[None]*model.vector_size
+     for word in clean_punc(text).split():
+         for i in range(0, model.vector_size):
+            if vector[i] is None or vector[i] < model.wv[word][i]:
+                vector[i] = model.wv[word][i]
+     doc_vectors.append(vector)  
+  return doc_vectors
 
 level=4
 articletexts = []
@@ -60,17 +81,13 @@ with open(file, "r") as csvfile:
   print("word2vec trained")
 
   # Train the SVM classifier
-  tokenized_train_texts = [clean_punc(text).split() for text in train_articletexts]
-  doc_vectors = []
-  for text in tokenized_train_texts:
-      doc_vector = sum(model.wv[word] for word in text) / len(text)
-      doc_vectors.append(doc_vector)
+  doc_vectors = vectors_from_text(model, train_articletexts)
   clf = SVC()
   clf.fit(doc_vectors, train_categories)
   print("SVC trained")
 
   # Predict categories for new texts
-  new_doc_vectors = [sum(model.wv[word] for word in clean_punc(text).split()) / len(clean_punc(text).split()) for text in test_articletexts]
+  new_doc_vectors = vectors_from_text(model, test_articletexts)
   predicted_categories = clf.predict(new_doc_vectors)
 
   for i in range(0, len(test_categories)):
