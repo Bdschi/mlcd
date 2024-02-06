@@ -14,6 +14,7 @@ def clean_punc(sentence):
   cleaned=re.sub(r'[?|!|\'|"|#]',r'',sentence)
   cleaned=re.sub(r'[.|,)|(|\|/]',r' ',cleaned)
   return cleaned
+
 def vectors_from_text(model, texts):
   doc_vectors=[]
   for text in texts:
@@ -82,9 +83,17 @@ with open(file, "r") as csvfile:
 
   # Train the SVM classifier
   doc_vectors = vectors_from_text(model, train_articletexts)
-  clf = SVC()
+  
+  # Get the best parameters for the classifier
+  parameters = {
+      'C': [10, 100, 1000],
+  }
+  clf=GridSearchCV(SVC(), parameters, cv=5, n_jobs=-1)
+  # print best parameters
   clf.fit(doc_vectors, train_categories)
   print("SVC trained")
+  print("Parameters:", clf.best_params_)
+  print("Estimator:", clf.best_estimator_)
 
   # Predict categories for new texts
   new_doc_vectors = vectors_from_text(model, test_articletexts)
